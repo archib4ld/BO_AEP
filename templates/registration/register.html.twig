@@ -1,0 +1,278 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h1 class="h3 mb-0 text-center">Création de compte</h1>
+                    </div>
+                    <div class="card-body p-4">
+                        {% for message in app.flashes('error') %}
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+
+                        {{ form_start(registrationForm, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate', 'id': 'registration-form'}}) }}
+                            <div class="mb-4">
+                                <h2 class="h5 mb-3">Informations personnelles</h2>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            {{ form_widget(registrationForm.pseudo, {'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Pseudo',
+                                                'data-validation': 'pseudo'
+                                            }}) }}
+                                            {{ form_label(registrationForm.pseudo, 'Pseudo') }}
+                                            <div class="form-text">Votre nom d'utilisateur public</div>
+                                            <div class="invalid-feedback" id="pseudo-feedback"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            {{ form_widget(registrationForm.login, {'attr': {
+                                                'class': 'form-control',
+                                                'placeholder': 'Login',
+                                                'data-validation': 'login'
+                                            }}) }}
+                                            {{ form_label(registrationForm.login, 'Login') }}
+                                            <div class="form-text">Identifiant de connexion</div>
+                                            <div class="invalid-feedback" id="login-feedback"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h2 class="h5 mb-3">Coordonnées</h2>
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(registrationForm.email, {'attr': {
+                                        'class': 'form-control',
+                                        'placeholder': 'Email',
+                                        'data-validation': 'email'
+                                    }}) }}
+                                    {{ form_label(registrationForm.email, 'Email') }}
+                                    <div class="form-text">Une adresse email valide pour la confirmation</div>
+                                    <div class="invalid-feedback" id="email-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h2 class="h5 mb-3">Sécurité</h2>
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(registrationForm.plainPassword, {'attr': {
+                                        'class': 'form-control',
+                                        'placeholder': 'Mot de passe',
+                                        'data-validation': 'password'
+                                    }}) }}
+                                    {{ form_label(registrationForm.plainPassword, 'Mot de passe') }}
+                                    <div class="form-text">
+                                        <ul class="list-unstyled password-requirements">
+                                            <li data-requirement="length"><i class="bi bi-x-circle-fill text-danger"></i> Minimum 12 caractères</li>
+                                            <li data-requirement="uppercase"><i class="bi bi-x-circle-fill text-danger"></i> Au moins une majuscule</li>
+                                            <li data-requirement="lowercase"><i class="bi bi-x-circle-fill text-danger"></i> Au moins une minuscule</li>
+                                            <li data-requirement="number"><i class="bi bi-x-circle-fill text-danger"></i> Au moins un chiffre</li>
+                                            <li data-requirement="special"><i class="bi bi-x-circle-fill text-danger"></i> Au moins un caractère spécial</li>
+                                        </ul>
+                                    </div>
+                                    <div class="invalid-feedback" id="password-feedback"></div>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    {{ form_widget(registrationForm.confirmPassword, {'attr': {
+                                        'class': 'form-control',
+                                        'placeholder': 'Confirmation du mot de passe',
+                                        'data-validation': 'password-confirm'
+                                    }}) }}
+                                    {{ form_label(registrationForm.confirmPassword, 'Confirmation du mot de passe') }}
+                                    <div class="invalid-feedback" id="password-confirm-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <h2 class="h5 mb-3">Vérification</h2>
+                                <div class="form-floating">
+                                    <div class="input-group">
+                                        {{ form_widget(registrationForm.captcha, {'attr': {
+                                            'class': 'form-control',
+                                            'placeholder': 'Code de vérification',
+                                            'data-validation': 'captcha'
+                                        }}) }}
+                                        <span class="input-group-text bg-light" style="font-family: monospace; font-size: 1.2em; letter-spacing: 2px;">
+                                            {{ captcha }}
+                                        </span>
+                                    </div>
+                                    <div class="form-text">Entrez le code de vérification affiché ci-dessus pour prouver que vous n'êtes pas un robot</div>
+                                    <div class="invalid-feedback" id="captcha-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                {{ form_widget(registrationForm.agreeTerms) }}
+                                {{ form_label(registrationForm.agreeTerms) }}
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submit-button" disabled>
+                                    <i class="bi bi-person-plus-fill me-2"></i>Créer mon compte
+                                </button>
+                                <a href="{{ path('app_login') }}" class="btn btn-outline-secondary">
+                                    <i class="bi bi-arrow-left me-2"></i>Retour à la connexion
+                                </a>
+                            </div>
+                        {{ form_end(registrationForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            color: #0d6efd;
+        }
+        .form-floating > .form-control:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        .form-text ul li {
+            margin-bottom: 0.25rem;
+        }
+        .form-text ul li i {
+            margin-right: 0.5rem;
+        }
+        .password-requirements li.valid i {
+            color: var(--success-color) !important;
+        }
+    </style>
+
+    {% block javascripts %}
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                const form = $('#registration-form');
+                const submitButton = $('#submit-button');
+                let formIsValid = false;
+
+                // Validation patterns
+                const patterns = {
+                    pseudo: /^[a-zA-Z0-9_-]{3,30}$/,
+                    login: /^[a-zA-Z0-9_-]{4,30}$/,
+                    email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    password: {
+                        length: /.{12,}/,
+                        uppercase: /[A-Z]/,
+                        lowercase: /[a-z]/,
+                        number: /[0-9]/,
+                        special: /[@$!%*?&]/
+                    }
+                };
+
+                // Password requirements check
+                function checkPasswordRequirements(password) {
+                    const requirements = {
+                        length: patterns.password.length.test(password),
+                        uppercase: patterns.password.uppercase.test(password),
+                        lowercase: patterns.password.lowercase.test(password),
+                        number: patterns.password.number.test(password),
+                        special: patterns.password.special.test(password)
+                    };
+
+                    $('.password-requirements li').each(function() {
+                        const requirement = $(this).data('requirement');
+                        if (requirements[requirement]) {
+                            $(this).addClass('valid');
+                            $(this).find('i').removeClass('bi-x-circle-fill text-danger')
+                                .addClass('bi-check-circle-fill text-success');
+                        } else {
+                            $(this).removeClass('valid');
+                            $(this).find('i').removeClass('bi-check-circle-fill text-success')
+                                .addClass('bi-x-circle-fill text-danger');
+                        }
+                    });
+
+                    return Object.values(requirements).every(Boolean);
+                }
+
+                // Real-time validation
+                function validateField(field) {
+                    const value = field.val();
+                    const type = field.data('validation');
+                    let isValid = false;
+                    let message = '';
+
+                    switch(type) {
+                        case 'pseudo':
+                            isValid = patterns.pseudo.test(value);
+                            message = isValid ? '' : 'Le pseudo doit contenir entre 3 et 30 caractères (lettres, chiffres, tirets et underscores)';
+                            break;
+                        case 'login':
+                            isValid = patterns.login.test(value);
+                            message = isValid ? '' : 'Le login doit contenir entre 4 et 30 caractères (lettres, chiffres, tirets et underscores)';
+                            break;
+                        case 'email':
+                            isValid = patterns.email.test(value);
+                            message = isValid ? '' : 'Veuillez entrer une adresse email valide';
+                            break;
+                        case 'password':
+                            isValid = checkPasswordRequirements(value);
+                            message = isValid ? '' : 'Le mot de passe ne respecte pas tous les critères requis';
+                            break;
+                        case 'password-confirm':
+                            const password = form.find('[data-validation="password"]').val();
+                            isValid = value === password;
+                            message = isValid ? '' : 'Les mots de passe ne correspondent pas';
+                            break;
+                        case 'captcha':
+                            isValid = value.length > 0;
+                            message = isValid ? '' : 'Veuillez entrer le code de vérification';
+                            break;
+                    }
+
+                    field.toggleClass('is-invalid', !isValid);
+                    field.toggleClass('is-valid', isValid && value.length > 0);
+                    $(`#${type}-feedback`).text(message);
+
+                    return isValid;
+                }
+
+                // Form validation
+                function validateForm() {
+                    let isValid = true;
+                    form.find('[data-validation]').each(function() {
+                        if (!validateField($(this))) {
+                            isValid = false;
+                        }
+                    });
+                    formIsValid = isValid;
+                    submitButton.prop('disabled', !isValid);
+                }
+
+                // Event listeners
+                form.find('[data-validation]').on('input', function() {
+                    validateField($(this));
+                    validateForm();
+                });
+
+                // Initial validation
+                validateForm();
+
+                // Form submission
+                form.on('submit', function(e) {
+                    if (!formIsValid) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+            });
+        </script>
+    {% endblock %}
+{% endblock %} 
